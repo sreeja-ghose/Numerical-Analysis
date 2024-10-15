@@ -1,0 +1,37 @@
+import numpy as np
+
+# Data points
+X = np.array([0.0, 0.5, 1.0, 1.5, 2.0, 2.0, 2.5])
+Y = np.array([0.0, 0.20, 0.27, 0.30, 0.32, 0.35, 0.27])
+
+# print equations
+print("Equations")
+for i in range(len(X)):
+    print("a exp",X[i],"+",X[i]**2,"b +", X[i],"c + d = ", Y[i])
+    
+# Create the design matrix
+A = np.vstack([np.exp(X), X**2, X, np.ones(X.shape[0])]).T
+
+# Compute the least-squares solution
+a, b, c, d = np.linalg.lstsq(A, Y, rcond=None)[0]
+
+print("Least squares solution")
+print("a =", a,",b =", b, ",c =", c, ",d =", d)
+
+
+"The method np.linalg.lstsq essentially computes the least-squares solution to a linear matrix equation."
+
+import matplotlib.pyplot as plt
+
+# Create a fine grid of X values for plotting the curve
+X_fine = np.linspace(0, 2.5, 400)
+Y_fine = a * np.exp(X_fine) + b * X_fine**2 + c * X_fine + d
+
+plt.scatter(X, Y, color='red', marker='o', label='Data Points')
+plt.plot(X_fine, Y_fine, color='blue', label='Best Fit Curve')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Best Fit Curve for Given Data Points')
+plt.legend()
+plt.grid(True)
+plt.show()
