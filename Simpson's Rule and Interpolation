@@ -1,0 +1,27 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define x values for plotting
+x = np.linspace(-0.5, 2.5, 400)
+
+# Define Lagrange polynomial L0(x)
+L0 = (x - 1) * (x - 2) / 2
+
+# Define Hermite polynomial H1(x)
+H1 = (1 - 2 * (x - 1)) * (x - 0)**2 * (x - 2)**2
+
+# Define Hermite polynomial K2(x)
+K2 = (x - 0) * (x - 1) * (x - 2)
+
+# Plotting the polynomials
+plt.figure(figsize=(10, 6))
+plt.plot(x, L0, label='$L_0(x)$', color='red')
+plt.plot(x, H1, label='$H_1(x)$', color='green')
+plt.plot(x, K2, label='$K_2(x)$', color='blue')
+plt.scatter([0, 1, 2], [0, 0, 0], color='black')  # Node points
+plt.xlabel('x')
+plt.ylabel('Polynomial Value')
+plt.title('Lagrange and Hermite Interpolation Polynomials')
+plt.legend()
+plt.grid(True)
+plt.show()
