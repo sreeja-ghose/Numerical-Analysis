@@ -1,0 +1,41 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the function f(x)
+def f(x):
+    return x**2
+
+# Define the Fourier series approximation
+def fourier_series_approx(x, N):
+    a0 = np.pi**2 / 3  # Calculated analytically
+    approximation = a0 / 2
+    for n in range(1, N + 1):
+        an = 4 * (-1)**n / n**2  # Calculated analytically
+        approximation += an * np.cos(n * x)
+    return approximation
+
+# Define the error function
+def epsilon(x, N):
+    return np.max(np.abs(f(x) - fourier_series_approx(x, N)))
+
+# Values of N to analyze
+N_values = [8, 16, 32, 64, 128, 256]
+# Error values for each N
+error_values = []
+
+# Calculating error for each N
+x_values = np.linspace(-np.pi, np.pi, 1000)  # Dense grid for accuracy
+for N in N_values:
+    error_values.append(epsilon(x_values, N))
+
+# Plotting on a log-log plot
+plt.figure(figsize=(10, 6))
+plt.loglog(N_values, error_values, marker='o')
+plt.xlabel('Number of Fourier Terms (N)')
+plt.ylabel('Error (ε)')
+plt.title('Error vs Number of Fourier Terms in Fourier Series Approximation')
+plt.grid(True)
+plt.show()
+
+# Print error values
+list(zip(N_values, error_values))
