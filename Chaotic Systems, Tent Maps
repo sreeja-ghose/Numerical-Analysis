@@ -1,0 +1,34 @@
+def tent_map(x, a=2):
+    return a * (0.5 - abs(x - 0.5))
+
+def fixed_point_iteration(x0, num_iterations):
+    x = x0
+    iterates = [x]
+    for _ in range(num_iterations):
+        x = tent_map(x)
+        iterates.append(x)
+    return iterates
+
+x0_1 = 0.399
+x0_2 = 0.400
+
+# For 10 iterates
+iterates_1_10 = fixed_point_iteration(x0_1, 10)
+iterates_2_10 = fixed_point_iteration(x0_2, 10)
+
+# For 200 iterates
+iterates_1_200 = fixed_point_iteration(x0_1, 200)
+iterates_2_200 = fixed_point_iteration(x0_2, 200)
+
+# Display the first 10 iterates for both starting points
+print(f"For x0 = {x0_1}:")
+for i, x in enumerate(iterates_1_10):
+    print(f"x_{i} = {x:.5f}")
+print("\n")
+print(f"For x0 = {x0_2}:")
+for i, x in enumerate(iterates_2_10):
+    print(f"x_{i} = {x:.5f}")
+
+# print("200 iterates for x0 = 0.399:", iterates_1_200)
+# print("200 iterates for x0 = 0.400:", iterates_2_200)
+
