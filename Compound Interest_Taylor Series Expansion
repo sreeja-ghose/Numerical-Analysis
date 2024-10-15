@@ -1,0 +1,37 @@
+import math 
+import numpy as np
+from matplotlib import pyplot as plt
+
+def f(C,r,n):
+    compound_interest = C*((1+(r/n))**n)
+    return compound_interest
+
+f(1.0, 0.015, 10**16)
+
+def f_new(C,r,n):
+    x= np.log1p(r/n)
+    x_times_n= x*n
+    result = np.exp(x_times_n)
+    f = c*result
+    return f
+
+f_new(1.0, 0.015, 10**16)
+
+f_new(1.0, 0.015, 10**8)
+
+def f_new_1(C,r,n):
+    compound_interest_approximation = C*math.exp(r)
+    return compound_interest_approximation
+
+f_new(1.0, 0.015, 10**16)
+
+def f_new1(C,r,n):
+    return (1+r/n)**n
+
+def taylor_approximation(C, r, n):
+    x = 1/n
+    return math.exp(r)*(1-x*r**2/2)
+
+print(f_new1(1.0, 0.015, 10**16))
+
+print(taylor_approximation(1.0, 0.015, 10**16))
