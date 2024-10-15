@@ -1,0 +1,21 @@
+import numpy as np
+
+# Define the Chebyshev points for n = 3
+n = 3
+chebyshev_nodes = [np.cos((2*k + 1) * np.pi / (2 * n + 2)) for k in range(n + 1)]
+
+# Define the function f(x)
+def f(x):
+    return 1 if x >= 0 else -1
+
+# Evaluate f(x) at the Chebyshev points
+function_values = [f(x) for x in chebyshev_nodes]
+
+chebyshev_nodes, function_values
+
+
+interpolating_polynomial = np.polynomial.Polynomial.fit(chebyshev_nodes, function_values, 3)
+
+explicit_polynomial = interpolating_polynomial.convert()
+
+chebyshev_nodes, function_values, explicit_polynomial.coef
