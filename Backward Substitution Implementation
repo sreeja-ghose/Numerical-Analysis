@@ -1,0 +1,122 @@
+import numpy as np
+
+def backward(U, b):
+    # Check if matrix and vector sizes are compatible
+    if U.shape[0] != U.shape[1] or U.shape[0] != b.shape[0]:
+        raise ValueError("Incompatible sizes of matrix U and vector b.")
+    
+    n = len(b)
+    x = np.zeros(n)
+    
+    for i in range(n-1, -1, -1):
+        sum_val = sum([U[i][j] * x[j] for j in range(i+1, n)])
+        x[i] = (b[i] - sum_val) / U[i][i]
+    
+    return x
+
+U = np.array([[1, 2, 6, -1],
+              [0, 3, 1, 0],
+              [0, 0, 4, -1],
+              [0, 0, 0, 2]])
+
+b = np.array([-1, -3, -2, 4])
+print(backward(U, b))
+
+
+def backward_check(U, b):
+    # Check if matrix and vector sizes are compatible
+    if U.shape[0] != U.shape[1] or U.shape[0] != b.shape[0]:
+        raise ValueError("Incompatible sizes of matrix U and vector b.")
+        
+    # if U is invertible 
+    inverse_U = np.linalg.inv(U)
+    
+    x = np.dot(inverse_U, b)
+    
+    print(x)
+  
+U = np.array([[1, 2, 6, -1],
+              [0, 3, 1, 0],
+              [0, 0, 4, -1],
+              [0, 0, 0, 2]])
+
+b = np.array([-1, -3, -2, 4])
+backward_check(U, b)
+
+"""
+check if backward(U, b) works
+- Cross-verify the solution by substituting the solution x back into the equation Ux=b to see if it holds true.
+- Compare the solution with numpy.linalg.solve.
+
+"""
+
+def check1(U, b):
+    x = np.linalg.solve(U,b)
+
+    print(x)
+
+U = np.array([[1, 2, 6, -1],
+              [0, 3, 1, 0],
+              [0, 0, 4, -1],
+              [0, 0, 0, 2]])
+
+b = np.array([-1, -3, -2, 4])
+check1(U, b)
+
+
+def check2(U,x):
+    b = np.dot(U, x)
+    
+    print(b)
+    
+U = np.array([[1, 2, 6, -1],
+              [0, 3, 1, 0],
+              [0, 0, 4, -1],
+              [0, 0, 0, 2]])
+x = np.array([3, -1, 0, 2])
+check2(U,x)
+
+import numpy as np
+
+def backward(U, b):
+    # Check if matrix and vector sizes are compatible
+    if U.shape[0] != U.shape[1] or U.shape[0] != b.shape[0]:
+        raise ValueError("Incompatible sizes of matrix U and vector b.")
+    
+    n = len(b)
+    x = np.zeros(n)
+    
+    for i in range(n-1, -1, -1):
+        # Check for zero or near-zero diagonal elements
+        if abs(U[i][i]) < 1e-10:
+            raise ValueError("Diagonal element too close to zero, may cause division error.")
+        
+        sum_val = sum([U[i][j] * x[j] for j in range(i+1, n)])
+        x[i] = (b[i] - sum_val) / U[i][i]
+    
+    return x
+
+# Random matrix and vector
+n = 100
+U = np.triu(np.random.rand(n, n))
+b = np.random.rand(n)
+
+x = backward(U, b)
+
+# Compute the error and relative error
+error = np.linalg.norm(np.dot(U, x) - b)
+relative_error = error / np.linalg.norm(b)
+print("Error:", error)
+print("Relative Error:", relative_error)
+
+# Compare with built-in solver
+x_np = np.linalg.solve(U, b)
+print(abs(x-x_np))
+
+
+"""
+The code does not solve the problem correctly. 
+The 1st operation agrees with machine precision. 
+But the errors keep accumulating and for the last rwo of A which receives (n-1) factors of the scaling factor, 
+each of which introduce a rounding error from the multiplication. The errors get amplified enormously. 
+"""
