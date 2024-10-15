@@ -1,0 +1,116 @@
+import math 
+import numpy as np
+from matplotlib import pyplot as plt
+
+def f(x):
+    return x**3 - 3*(x**2) + 3 
+
+
+def secant_method(x0, x1, iter):
+    for i in range(iter):
+        x2 = x1-((f(x1)*(x1-x0))/(f(x1)-f(x0)))
+        print(x2)
+        
+        x0 = x1 
+        x1 = x2
+                
+
+x0 = 1
+x1 = 2
+iter = 5
+secant_method(x0, x1, iter)
+
+def f_prime(x):
+    return 3*x**2 - 6*x
+
+def Newtons_method(x0):
+    xk = x0
+    for i in range(20):
+        xk1 = xk - f(xk) / f_prime(xk)
+        xk = xk1 
+        print(xk)
+    return xk
+
+Newtons_method(1.5)
+
+Newtons_method(2.1)
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x):
+    return x**3 - 3*x**2 + 3
+
+def df(x):
+    return 3*x**2 - 6*x
+
+# Newton's method to approximate the root
+def find_root(x0, tol=1e-6, max_iter=100):
+    x = x0
+    for _ in range(max_iter):
+        x_new = x - f(x)/df(x)
+        if abs(x_new - x) < tol:
+            return x_new
+        x = x_new
+    return x
+
+root = find_root(2.1)
+
+# Generate values
+x_vals = np.linspace(0, 4, 400)
+y_vals = [f(x) for x in x_vals]
+
+# Plot
+plt.plot(x_vals, y_vals, label="f(x) = x^3 - 3x^2 + 3")
+plt.scatter(root, 0, color='red', label=f"Root at x = {root:.5f}")  # plot the root as a red dot
+plt.axhline(0, color='black',linewidth=0.5)
+plt.axvline(0, color='black',linewidth=0.5)
+plt.title("Graph of the equation")
+plt.xlabel("x")
+plt.ylabel("f(x)")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+
+def f(x):
+    return x**3 - 3*x**2 + 3
+
+def df(x):
+    return 3*x**2 - 6*x
+
+def d2f(x):
+    return 6*x - 6
+
+x0 = 2.1
+iterations = 10
+roots = [x0]
+
+for i in range(iterations):
+    x0 = x0 - f(x0)/df(x0)
+    roots.append(x0)
+
+xi = roots[-1]
+mu = abs(d2f(xi)) / (2 * abs(df(xi)))
+
+# Errors for x-axis
+errors_xk = [abs(root - xi) for root in roots[:-1]]
+
+# Errors for y-axis
+errors_xk1 = [abs(roots[i+1] - xi) for i in range(iterations)]
+
+# Expected convergence behavior
+convergence = [mu * error**2 for error in errors_xk]
+
+plt.plot(errors_xk, errors_xk1, label='|x_k+1 - ξ|', marker='o')
+plt.plot(errors_xk, convergence, label='µ|x_k - ξ|^2', linestyle='--', marker='x')
+plt.xlabel('|x_k - ξ|')
+plt.ylabel('Error/Convergence')
+plt.legend()
+plt.yscale('log')  # Using a logarithmic scale on y-axis for better visualization
+plt.xscale('log')  # Using a logarithmic scale on x-axis for better visualization
+plt.grid(True, which="both", ls="--", c='0.7')
+plt.title("Comparison of |x_k+1 - ξ| and µ|x_k - ξ|^2")
+plt.show()
