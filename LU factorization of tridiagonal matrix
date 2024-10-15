@@ -1,0 +1,47 @@
+import numpy as np
+
+def tridiagonal_LU(a, b, c):
+    n = len(a)
+    
+    # Initialize L and U matrices
+    L = np.zeros((n, n))
+    U = np.zeros((n, n))
+
+    # Initial values
+    e = [a[0]]
+    f = [c[0]]
+    
+    for i in range(1, n):
+        d = b[i-1] / e[i-1]
+        e.append(-a[i] + d*c[i])
+        if i != n-1: # f[n-1] doesn't exist
+            f.append(c[i])
+        
+        # Fill L and U
+        L[i][i] = 1
+        L[i][i-1] = d
+        U[i-1][i-1] = e[i-1]
+        U[i-1][i] = f[i-1]
+
+    # Setting the last element for U
+    U[-1][-1] = e[-1]
+    
+    return L, U
+
+# Example matrices:
+a = [2, 3, 4]
+b = [1, 1]
+c = [1, 1]
+L, U = tridiagonal_LU(a, b, c)
+
+print("L:")
+print(L)
+print("\nU:")
+print(U)
+
+# Check if LU = A
+A_reconstructed = np.dot(L, U)
+print("\nA (Reconstructed):")
+print(A_reconstructed)
+
+
